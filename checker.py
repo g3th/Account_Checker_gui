@@ -26,7 +26,7 @@ class checker_gui():
 
 	def disney(self):	
 		self.service_label.destroy()
-
+		self.disney_plus.split_combo_file(self.gui)
 	def loop(self):
 		self.gui.mainloop()
 		

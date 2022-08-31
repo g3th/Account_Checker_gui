@@ -1,9 +1,13 @@
 import os
+import tkinter
+from tkinter import *
+from tkinter import ttk
 from pathlib import Path
 
-def combo_splitter(service):	
+def combo_splitter(service,root):
+	split_text = Label(root, text='Splitting Combos')
+	split_text.place(x=50,y=60)
 	directory = str(Path(__file__).parent)
-	print('Current Directory: \n{} \n'.format(os.listdir(directory)))
 	combo_list_name = service
 	clean_list=[]
 	with open(combo_list_name, 'r') as combo:
@@ -15,3 +19,4 @@ def combo_splitter(service):
 			clean.write(line+'\n')
 	os.remove(service)
 	os.rename(parsed_list_name, service)
+	split_text['text']='Done Splitting'
