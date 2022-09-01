@@ -10,7 +10,7 @@ class checker_gui():
 
 		self.gui = Tk()
 		self.gui.resizable(False,False)
-		self.gui.geometry('300x600')
+		self.gui.geometry('500x600')
 		self.gui.title('Selenium Account Checkers')
 		self.disney_plus = disney_checker(self.gui)
 
@@ -24,9 +24,13 @@ class checker_gui():
 		self.disney = Button(self.gui, text = 'Disney+', font=('Arial', 12), command = self.disney)
 		self.disney.place(x=35, y=150)
 
-	def disney(self):	
+	def disney(self):
 		self.service_label.destroy()
-		self.disney_plus.split_combo_file(self.gui)
+		self.disney.destroy()
+		checker = disney_checker(self.gui)
+		checker.split_combo_file(self.gui)
+		checker.draw_checker_button(self.gui)
+		checker.draw_the_infobox()
 
 	def loop(self):
 		self.gui.mainloop()
