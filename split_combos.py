@@ -9,7 +9,7 @@ class split_combos():
 
 	def __init__(self, root):
 		self.split_combos_button = Button(root, text = 'Split Combos', font=('Arial', 12), command= partial(self.combo_splitter,'disney',root))
-		self.split_combos_button.place(x=188, y=115)
+		self.split_combos_button.place(x=342, y=115)
 
 	def combo_splitter(self,service,root):		
 		directory = str(Path(__file__).parent)

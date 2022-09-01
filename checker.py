@@ -10,7 +10,7 @@ class checker_gui():
 
 		self.gui = Tk()
 		self.gui.resizable(False,False)
-		self.gui.geometry('500x600')
+		self.gui.geometry('800x600')
 		self.gui.title('Selenium Account Checkers')
 		self.disney_plus = disney_checker(self.gui)
 
