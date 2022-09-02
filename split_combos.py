@@ -9,7 +9,11 @@ class split_combos():
 
 	def __init__(self, root):
 		self.split_combos_button = Button(root, text = 'Split Combos', font=('Arial', 12), command= partial(self.combo_splitter,'disney',root))
-		self.split_combos_button.place(x=342, y=115)
+		self.split_combos_button.place(x=342, y=146)
+	
+	
+	def destroy_split_button(self):
+		self.split_combos_button.destroy()
 
 	def combo_splitter(self,service,root):		
 		directory = str(Path(__file__).parent)
@@ -24,9 +28,11 @@ class split_combos():
 				clean.write(line+'\n')
 		os.remove(service)
 		os.rename(parsed_list_name, service)
-		self.split_combos_button.destroy()
+		self.destroy_split_button()
 		split_text_completed= Label(root, text='Done Splitting',font=('Arial',14))
 		split_text_number_of_combos= Label(root, text='Total Number of Combos {}'.format(str(len(clean_list))), font=('Arial',14))
 		split_text_completed.place(x=195,y=85)
 		split_text_number_of_combos.place(x=120,y=115)
+	
+	
 		
