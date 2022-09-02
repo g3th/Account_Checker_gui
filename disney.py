@@ -15,7 +15,7 @@ from pathlib import Path
 class disney_checker():
 
 	def __init__(self, root):
-		self.infobox = Text(root, bg='goldenrod3',font=('Arial',14),height = 360, width=460)
+		self.infobox = Text(root, bg='goldenrod3',font=('Arial',11),height = 360, width=460)
 		self.file_directory = str(Path(__file__).parent)+'/disney'
 		self.page = 'https://www.disneyplus.com/login'
 		self.users = []
@@ -47,7 +47,6 @@ class disney_checker():
 		self.draw_the_infobox()
 		self.split_username_and_password()
 		self.start_checker.destroy()
-		self.destroy_info_labels
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
 		checking_progress_label = Label(root,bg='goldenrod3', text = 'Opening Browser...',font=('Arial',12))

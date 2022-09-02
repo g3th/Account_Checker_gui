@@ -1,6 +1,7 @@
 import tkinter
 import subprocess
 from disney import disney_checker
+from graphics.title import main_title, disney_title
 from tkinter import *
 from tkinter import ttk
 
@@ -18,21 +19,11 @@ class checker_gui():
 		self.disney_plus = disney_checker(self.gui)
 
 	def draw_title(self):
+		title=main_title()
 		self.titlebox.place(x=40,y=15)
 		self.titlebox.pack()
-		self.titlebox.create_text(300,40,text=r''' █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
-██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
-███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   
-██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   
-██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   
-╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝''',font=('Courier New',8))
-		self.titlebox.create_text(400,125,text=r''' ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ 
-██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗
-██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝
-██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗
-╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║
- ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
- 			github.com/g3th''',font=('Courier New',8))
+		self.titlebox.create_text(300,40,text=title[0],font=('Courier New',8),tag='account')
+		self.titlebox.create_text(400,125,text=title[1],font=('Courier New',8),tag='checker')
 		self.titlebox.config(state = DISABLED)
 	
 	def draw_services_box(self):
@@ -51,7 +42,12 @@ class checker_gui():
 		self.disney.place(x=55, y=320)
 
 	def disney(self):
+		title=disney_title()
+		self.titlebox.delete('account')
+		self.titlebox.delete('checker')
 		self.service_label.destroy()
+		self.titlebox.create_text(300,40,text=title[0],font=('Courier New',8),tag='disney')
+		self.titlebox.create_text(400,125,text=title[1],font=('Courier New',8),tag='plus')
 		self.disney.destroy()
 		checker = disney_checker(self.gui)
 		checker.split_combo_file(self.gui)
