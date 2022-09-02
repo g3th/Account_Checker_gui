@@ -15,7 +15,7 @@ from pathlib import Path
 class disney_checker():
 
 	def __init__(self, root):
-		self.infobox = Text(root, font=('Arial',14),height = 360, width=460)
+		self.infobox = Text(root, bg='goldenrod3',font=('Arial',14),height = 360, width=460)
 		self.file_directory = str(Path(__file__).parent)+'/disney'
 		self.page = 'https://www.disneyplus.com/login'
 		self.users = []
@@ -31,10 +31,10 @@ class disney_checker():
 	
 	def draw_checker_button(self,root):
 		self.start_checker = Button(root, text = 'Start Checker', font=('Arial', 13), command = partial(self.check_the_accounts,root))
-		self.start_checker.place(x=342,y=562)
+		self.start_checker.place(x=328,y=560)
 			
 	def draw_the_infobox(self):
-		self.infobox.place(x=20,y=180,width=762,height=380)
+		self.infobox.place(x=58,y=288,width=681,height=250)
 		
 	def split_username_and_password(self):
 		os.makedirs('accounts',exist_ok=True)
@@ -44,11 +44,14 @@ class disney_checker():
 					self.passwords.append(line.split(':')[1].strip())
 									
 	def check_the_accounts(self,root):
+		self.draw_the_infobox()
 		self.split_username_and_password()
 		self.start_checker.destroy()
+		self.destroy_info_labels
 		self.split_combos.destroy_split_button()
-		checking_progress_label = Label(root, text = 'Opening Browser...',font=('Arial',12))
-		checking_progress_label.place(x=342,y=562)
+		self.split_combos.destroy_info_label()
+		checking_progress_label = Label(root,bg='goldenrod3', text = 'Opening Browser...',font=('Arial',12))
+		checking_progress_label.place(x=68,y=238)
 		index = 0
 		error_on_first_page = False
 		while index != len(self.users):

@@ -56,7 +56,6 @@ class checker_gui():
 		checker = disney_checker(self.gui)
 		checker.split_combo_file(self.gui)
 		checker.draw_checker_button(self.gui)
-		checker.draw_the_infobox()
 
 	def loop(self):
 		self.gui.mainloop()
