@@ -16,7 +16,7 @@ class checker_gui():
 		self.gui.configure(bg='goldenrod4')
 		self.gui.resizable(False,False)
 		self.gui.geometry('800x600')
-		self.gui.title('Selenium Account Checkers',background='Yellow')
+		self.gui.title('Selenium Account Checkers')
 		self.titlebox= Canvas(self.gui,bg='goldenrod2',width=710,height=178)
 		self.servicesbox= Canvas(self.gui,bg='goldenrod3',width=710,height=320)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
@@ -67,6 +67,7 @@ class checker_gui():
 	
 		title=disney_title()
 		self.checker = disney_checker(self.gui)
+		self.service_label.destroy()
 		self.services.services_destroy()
 		self.draw_services_title(title)
 		self.back_button.place(x=470,y=560)
