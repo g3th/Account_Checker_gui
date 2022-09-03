@@ -3,6 +3,7 @@ import tkinter
 from functools import partial
 from tkinter import *
 from tkinter import ttk
+from tkinter.ttk import *
 from pathlib import Path
 
 class split_combos():
@@ -10,9 +11,9 @@ class split_combos():
 	def __init__(self, root):
 
 		self.clean_list=[]
-		self.split_combos_button = Button(root, text = 'Split Combos', font=('Arial', 12), command= partial(self.combo_splitter,'disney',root))
+		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter,'disney',root), style='GUI_Buttons.TButton')
 		self.split_combos_button.place(x=342, y=192)
-		self.split_text_completed= Label(root, bg='goldenrod3',font=('Arial',18))
+		self.split_text_completed= Label(root, background='goldenrod3',font=('Arial',18))
 	
 	def destroy_split_button(self):
 		self.split_combos_button.destroy()
@@ -36,6 +37,3 @@ class split_combos():
 
 	def destroy_info_label(self):
 		self.split_text_completed.destroy()
-	
-	
-		
