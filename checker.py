@@ -5,6 +5,7 @@ from graphics.title import main_title, disney_title, espn_title
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from pathlib import Path
 
 class checker_gui():
 
@@ -12,6 +13,7 @@ class checker_gui():
 
 		self.gui = Tk()
 		self.style = Style()
+		self.gui.iconbitmap('@graphics/checker.xbm')
 		self.style.configure('GUI_Buttons.TButton',background='goldenrod3', font=('Arial', 10))
 		self.gui.configure(bg='goldenrod4')
 		self.gui.resizable(False,False)
@@ -70,7 +72,7 @@ class checker_gui():
 		self.service_label.destroy()
 		self.services.services_destroy()
 		self.draw_services_title(title)
-		self.back_button.place(x=470,y=560)
+		self.back_button.place(x=416,y=560)
 		self.checker.split_combo_file(self.gui)
 		self.checker.draw_checker_button(self.gui)
 	
@@ -78,6 +80,7 @@ class checker_gui():
 	
 		title=espn_title()
 		self.checker = espn_checker(self.gui)
+		self.service_label.destroy()
 		self.services.services_destroy()
 		self.draw_services_title(title)
 		self.back_button.place(x=470,y=560)

