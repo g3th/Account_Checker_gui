@@ -67,21 +67,20 @@ class disney_checker():
 		self.information_bar.destroy()
 		self.split_combos.destroy_info_label()
 		
-	def check_the_accounts(self):
-		
+	def check_the_accounts(self):		
 		self.draw_the_infobox()
 		self.split_username_and_password()
-		
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
 		index = 0
 		error_on_first_page = False
 		while index != len(self.users):
+			self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
 			if self.stop_checker == True:
 				self.information_bar.delete('all')
 				self.information_bar.create_text(82,18,text = 'Paused..',font=('Arial',12))
 				self.stop_checker == False
-				self.start_checker.configure(text = 'Resume', command = self.test_print)	
+				self.start_checker.configure(text = 'Resume', command = self.check_the_accounts)
 				break
 			with open('accounts/disney_working_accounts','a') as account_results:
 				try:
@@ -152,8 +151,7 @@ class disney_checker():
 		self.information_bar.delete('all')
 		self.information_bar.create_text(90,18,text ='Pause Queued...',font=('Arial',12))
 		self.stop_checker = True
-		self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
-		
+	
 	def account_checker_thread(self):
 		threading.Thread(target=self.check_the_accounts,args=()).start()
 	
