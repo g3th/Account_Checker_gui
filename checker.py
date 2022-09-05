@@ -4,7 +4,6 @@ from streaming_services.disney import disney_checker
 from streaming_services.espn import espn_checker
 from graphics.title import main_title, disney_title, espn_title
 from tkinter import *
-from tkinter import ttk
 from tkinter.ttk import *
 from pathlib import Path
 
@@ -15,7 +14,7 @@ class checker_gui():
 		self.gui = Tk()
 		self.style = Style()
 		self.gui.iconbitmap('@graphics/checker.xbm')
-		self.style.configure('GUI_Buttons.TButton',background='goldenrod3', font=('Arial', 10))
+		self.style.configure('GUI_Buttons.TButton',background='goldenrod3', font=('Arial', 10),height=20,width=14)
 		self.gui.configure(bg='goldenrod4')
 		self.gui.resizable(False,False)
 		self.gui.geometry('800x600')
@@ -46,13 +45,18 @@ class checker_gui():
 	
 	def back_button_own_thread(self):
 	
-		threading.Thread(target=self.create_back_button,args=(363,560)).start()
+		threading.Thread(target=self.create_back_button,args=(358, 560)).start()
 	
 	def services_buttons(self):
 
 		self.services = services_elements()
-		self.services.services_buttons(self.gui, 'Disney+', self.disney, 55, 360)
-		self.services.services_buttons(self.gui, 'ESPN+', self.espn_plus, 160, 360)
+		self.services.services_buttons(self.gui, 'Disney+', self.disney, 115, 315)
+		self.services.services_buttons(self.gui, 'ESPN+', self.espn_plus, 314, 315)
+		self.services.services_buttons(self.gui, 'Paramount+', self.espn_plus, 513, 315)
+		self.services.services_buttons(self.gui, 'Dazn', self.espn_plus, 115, 380)
+		self.services.services_buttons(self.gui, 'HBO', self.espn_plus, 314, 380)
+		self.services.services_buttons(self.gui, 'Fubo', self.espn_plus, 513, 380)
+		self.services.services_buttons(self.gui, 'Peacock', self.espn_plus, 115, 442)
 	
 	def draw_services_box(self):
 		
@@ -71,8 +75,8 @@ class checker_gui():
 			
 	def labels(self):
 		
-		self.service_label = Label(self.gui, background='goldenrod3',text='Choose a Service to Check',font=('Arial', 18))
-		self.service_label.place(x=48, y=238)
+		self.service_label = Label(self.gui, background='goldenrod3',text='Choose a Service to Check a Combo-list:',font=('Arial', 13))
+		self.service_label.place(x=52, y=245)
 
 	def disney(self):
 	

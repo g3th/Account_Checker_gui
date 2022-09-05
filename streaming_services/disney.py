@@ -40,7 +40,7 @@ class disney_checker():
 		
 	def draw_checker_button(self):
 			
-		self.start_checker.place(x=258,y=560)
+		self.start_checker.place(x=238,y=560)
 			
 	def draw_the_infobox(self):
 
