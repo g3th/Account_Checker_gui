@@ -1,3 +1,4 @@
+import threading
 from services import services_elements
 from streaming_services.disney import disney_checker
 from streaming_services.espn import espn_checker
@@ -39,6 +40,15 @@ class checker_gui():
 		self.titlebox.create_text(300,40,text=title[0],font=('Courier New',8),tag='top_title')
 		self.titlebox.create_text(390,125,text=title[1],font=('Courier New',8),tag='bottom_title')
 	
+	def create_back_button(self,xpos,ypos):
+
+		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
+		self.back_button.place(x=xpos,y=ypos)
+	
+	def threaded_button(self):
+	
+		threading.Thread(target=self.create_back_button,args=(416,560)).start()
+	
 	def services_buttons(self):
 
 		self.services = services_elements()
@@ -71,11 +81,11 @@ class checker_gui():
 		self.checker = disney_checker(self.gui)
 		self.service_label.destroy()
 		self.services.services_destroy()
+		self.threaded_button()
 		self.draw_services_title(title)
-		self.back_button.place(x=416,y=560)
 		self.checker.split_combo_file(self.gui)
-		self.checker.draw_checker_button(self.gui)
-	
+		self.checker.draw_checker_button()
+
 	def espn_plus(self):
 	
 		title=espn_title()

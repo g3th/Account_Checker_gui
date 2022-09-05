@@ -8,17 +8,17 @@ from pathlib import Path
 
 class split_combos():
 
-	def __init__(self, root):
+	def __init__(self,root,service):
 
 		self.clean_list=[]
-		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter,'disney',root), style='GUI_Buttons.TButton')
+		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter, service), style='GUI_Buttons.TButton')
 		self.split_combos_button.place(x=342, y=192)
-		self.split_text_completed= Label(root, background='goldenrod3',font=('Arial',18))
+		self.split_text_completed= Label(root, background='goldenrod3',font=('Arial',12))
 	
 	def destroy_split_button(self):
 		self.split_combos_button.destroy()
 
-	def combo_splitter(self,service,root):
+	def combo_splitter(self, service):
 	
 		directory = str(Path(__file__).parent)
 		combo_list_name = service
@@ -34,12 +34,10 @@ class split_combos():
 			os.remove(service)
 			os.rename(parsed_list_name, service)		
 			self.destroy_split_button()
-			self.split_text_completed['text']='Done Splitting - Total Combos {}'.format(str(len(self.clean_list))), 
-			self.split_text_completed.place(x=48,y=245)
-			
+			self.split_text_completed['text']='Done Splitting - Total Combos {}'.format(str(len(self.clean_list)))
+			self.split_text_completed.place(x=65,y=247)
 		except FileNotFoundError:
 			self.split_text_completed['text']='No Combo-list Found.'
-			self.split_text_completed.place(x=48,y=245)
-			
+			self.split_text_completed.place(x=65,y=247)
 	def destroy_info_label(self):
 		self.split_text_completed.destroy()
