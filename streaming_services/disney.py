@@ -29,7 +29,8 @@ class disney_checker():
 		self.browser_options = Options()
 		self.browser_options.add_argument = ('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36')		
 		self.browser_options.headless = True
-		self.start_checker = Button(root, text = 'Start Checker',command = self.threaded_function, style='GUI_Buttons.TButton')
+		self.start_checker = Button(root, text = 'Start Checker',command = self.account_checker_thread, style='GUI_Buttons.TButton')
+		self.stop_checker = False
 		
 	def split_combo_file(self,root):
 	
@@ -67,15 +68,21 @@ class disney_checker():
 		self.split_combos.destroy_info_label()
 		
 	def check_the_accounts(self):
-	
+		
 		self.draw_the_infobox()
 		self.split_username_and_password()
-		self.start_checker.destroy()
+		
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
 		index = 0
 		error_on_first_page = False
 		while index != len(self.users):
+			if self.stop_checker == True:
+				self.information_bar.delete('all')
+				self.information_bar.create_text(82,18,text = 'Paused..',font=('Arial',12))
+				self.stop_checker == False
+				self.start_checker.configure(text = 'Resume', command = self.test_print)	
+				break
 			with open('accounts/disney_working_accounts','a') as account_results:
 				try:
 					self.infobox.insert(END,'Trying Combo {} out of {}'.format(index+1, len(self.users)))
@@ -141,5 +148,14 @@ class disney_checker():
 					self.infobox.insert(END,'\n{}'.format(e))
 					break
 					
-	def threaded_function(self):	
+	def pause_resume_the_checker(self):
+		self.information_bar.delete('all')
+		self.information_bar.create_text(90,18,text ='Pause Queued...',font=('Arial',12))
+		self.stop_checker = True
+		self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
+		
+	def account_checker_thread(self):
 		threading.Thread(target=self.check_the_accounts,args=()).start()
+	
+	def test_print(self):
+		print('test')
