@@ -31,7 +31,7 @@ class disney_checker():
 		self.browser_options.headless = True
 		self.start_checker = Button(root, text = 'Start Checker',command = self.account_checker_thread, style='GUI_Buttons.TButton')
 		self.stop_checker = False
-		self.run_only_on_first_checker_instance = False
+		self.run_only_on_first_checker_instance = True
 		self.index = 0
 
 	def split_combo_file(self,root):
@@ -70,7 +70,7 @@ class disney_checker():
 		self.split_combos.destroy_info_label()
 		
 	def check_the_accounts(self):
-		if self.run_only_on_first_checker_instance == False:
+		if self.run_only_on_first_checker_instance == True:
 			self.split_username_and_password()			
 		self.draw_the_infobox()
 		self.split_combos.destroy_split_button()
@@ -82,8 +82,7 @@ class disney_checker():
 				self.information_bar.create_text(82,18,text = 'Paused..',font=('Arial',12))
 				self.start_checker.configure(text = 'Resume', command = self.account_checker_thread)
 				self.stop_checker = False
-				self.run_only_on_first_checker_instance = True
-				print(self.stop_checker)
+				self.run_only_on_first_checker_instance = False
 				break
 			else:
 				self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
