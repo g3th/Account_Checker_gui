@@ -40,9 +40,10 @@ class disney_checker():
 		
 	def draw_checker_button(self):
 			
-		self.start_checker.place(x=298,y=560)
+		self.start_checker.place(x=258,y=560)
 			
 	def draw_the_infobox(self):
+
 		self.infobox.place(x=58,y=288,width=681,height=250)
 		
 	def split_username_and_password(self):
@@ -71,9 +72,8 @@ class disney_checker():
 		
 	def check_the_accounts(self):
 		if self.run_only_on_first_checker_instance == True:
-			self.split_username_and_password()			
+			self.split_username_and_password()
 		self.draw_the_infobox()
-		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
 		error_on_first_page = False
 		while self.index != len(self.users):
@@ -157,6 +157,4 @@ class disney_checker():
 	
 	def account_checker_thread(self):
 		threading.Thread(target=self.check_the_accounts,args=()).start()
-	
-	def test_print(self):
-		print('test')
+

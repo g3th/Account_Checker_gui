@@ -19,26 +19,25 @@ class checker_gui():
 		self.gui.configure(bg='goldenrod4')
 		self.gui.resizable(False,False)
 		self.gui.geometry('800x600')
-		self.gui.title('Selenium Account Checkers')
-		self.titlebox= Canvas(self.gui,bg='goldenrod2',width=710,height=178)
+		self.gui.title('Selenium Webdriver Account Checkers')
+		self.titlebox= Canvas(self.gui,bg='goldenrod2',width=510,height=178)
 		self.servicesbox= Canvas(self.gui,bg='goldenrod3',width=710,height=320)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 		
 	def draw_main_title(self):
 	
 		title=main_title()
-		self.titlebox.place(x=40,y=15)
-		self.titlebox.pack()
-		self.titlebox.create_text(300,40,text=title[0],font=('Courier New',8),tag='top_title')
-		self.titlebox.create_text(400,125,text=title[1],font=('Courier New',8),tag='bottom_title')
+		self.titlebox.place(x=148,y=15)
+		self.titlebox.create_text(233,44,text=title[0],font=('Courier New',8),tag='top_title')
+		self.titlebox.create_text(290,132,text=title[1],font=('Courier New',8),tag='bottom_title')
 		self.titlebox.config(state = DISABLED)
 	
-	def draw_services_title(self, title):
+	def draw_services_title(self, title,x1,y1,x2,y2):
 	
 		self.titlebox.delete('top_title')
 		self.titlebox.delete('bottom_title')
-		self.titlebox.create_text(300,40,text=title[0],font=('Courier New',8),tag='top_title')
-		self.titlebox.create_text(390,125,text=title[1],font=('Courier New',8),tag='bottom_title')
+		self.titlebox.create_text(x1,y1,text=title[0],font=('Courier New',8),tag='top_title')
+		self.titlebox.create_text(x2,y2,text=title[1],font=('Courier New',8),tag='bottom_title')
 	
 	def create_back_button(self,xpos,ypos):
 
@@ -47,7 +46,7 @@ class checker_gui():
 	
 	def threaded_button(self):
 	
-		threading.Thread(target=self.create_back_button,args=(416,560)).start()
+		threading.Thread(target=self.create_back_button,args=(363,560)).start()
 	
 	def services_buttons(self):
 
@@ -82,7 +81,7 @@ class checker_gui():
 		self.service_label.destroy()
 		self.services.services_destroy()
 		self.threaded_button()
-		self.draw_services_title(title)
+		self.draw_services_title(title,220,45,300,128)
 		self.checker.split_combo_file(self.gui)
 		self.checker.draw_checker_button()
 
@@ -92,7 +91,7 @@ class checker_gui():
 		self.checker = espn_checker(self.gui)
 		self.service_label.destroy()
 		self.services.services_destroy()
-		self.draw_services_title(title)
+		self.draw_services_title(title,280,40,300,125)
 		self.back_button.place(x=470,y=560)
 		
 	def loop(self):

@@ -12,14 +12,13 @@ class split_combos():
 
 		self.clean_list=[]
 		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter, service), style='GUI_Buttons.TButton')
-		self.split_combos_button.place(x=342, y=192)
+		self.split_combos_button.place(x=450, y=560)
 		self.split_text_completed= Label(root, background='goldenrod3',font=('Arial',12))
 	
 	def destroy_split_button(self):
 		self.split_combos_button.destroy()
 
 	def combo_splitter(self, service):
-	
 		directory = str(Path(__file__).parent)
 		combo_list_name = service
 		try:
