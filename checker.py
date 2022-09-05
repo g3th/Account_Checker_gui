@@ -44,7 +44,7 @@ class checker_gui():
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 		self.back_button.place(x=xpos,y=ypos)
 	
-	def threaded_button(self):
+	def back_button_own_thread(self):
 	
 		threading.Thread(target=self.create_back_button,args=(363,560)).start()
 	
@@ -80,7 +80,7 @@ class checker_gui():
 		self.checker = disney_checker(self.gui)
 		self.service_label.destroy()
 		self.services.services_destroy()
-		self.threaded_button()
+		self.back_button_own_thread()
 		self.draw_services_title(title,220,45,300,128)
 		self.checker.split_combo_file(self.gui)
 		self.checker.draw_checker_button()
@@ -92,7 +92,7 @@ class checker_gui():
 		self.service_label.destroy()
 		self.services.services_destroy()
 		self.draw_services_title(title,280,40,300,125)
-		self.back_button.place(x=470,y=560)
+		self.back_button_own_thread()
 		
 	def loop(self):
 	
