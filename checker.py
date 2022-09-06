@@ -23,13 +23,23 @@ class checker_gui():
 		self.titlebox= Canvas(self.gui,bg='skyblue2',width=510,height=178)
 		self.servicesbox= Canvas(self.gui,bg='skyblue3',width=710,height=320)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
-		
-	def draw_main_title(self):
 	
+	def create_main_title(self,x1,y1,titletext,colour):
+
+		self.titlebox.create_text(x1,y1,text=titletext,fill=colour,font=('Courier New',8),tag='top_title')
+		self.titlebox.create_text(x1,y1,text=titletext,fill=colour,font=('Courier New',8),tag='bottom_title')
+
+	def colourize_main_title(self):
+
+		x1=233;y1=18;x2=290;y2=108
+		colour=['indigo', 'blueviolet', 'purple1', 'purple2', 'purple3', 'purple4', 'mediumpurple', 'mediumpurple1', 'mediumpurple2', 'mediumpurple3', 'mediumpurple4']
 		title=main_title()
 		self.titlebox.place(x=148,y=15)
-		self.titlebox.create_text(233,44,text=title[0],font=('Courier New',8),tag='top_title')
-		self.titlebox.create_text(290,132,text=title[1],font=('Courier New',8),tag='bottom_title')
+		for i in range(len(title[0])):
+			self.create_main_title(x1,y1,title[0][i]+'\n',colour[i])
+			self.create_main_title(x2,y2,title[1][i]+'\n',colour[i])
+			y1=y1+12
+			y2=y2+12
 		self.titlebox.config(state = DISABLED)
 	
 	def draw_services_title(self, title,x1,y1,x2,y2):
@@ -72,7 +82,7 @@ class checker_gui():
 		self.services_buttons()
 		self.titlebox.delete('top_title')
 		self.titlebox.delete('bottom_title')
-		self.draw_main_title()
+		self.colourize_main_title()
 			
 	def labels(self):
 		
@@ -105,7 +115,7 @@ class checker_gui():
 		
 if __name__ == '__main__':
 	checker = checker_gui()
-	checker.draw_main_title()
+	checker.colourize_main_title()
 	checker.services_buttons()
 	checker.draw_services_box()
 	checker.labels()

@@ -9,7 +9,6 @@ class services_elements:
 		self.service_type_list = []
 
 	def services_buttons(self, root, service_name, call, horizontal_placement, vertical_placement):
-		
 		self.service_type = Button(root, text = service_name, command = call, style='Services_Buttons.TButton')
 		self.service_type.place(x= horizontal_placement, y= vertical_placement)
 		self.service_type_list.append(self.service_type)
