@@ -4,7 +4,8 @@ class services_elements:
 
 	def __init__(self):
 		self.style = Style()
-		self.style.configure('Services_Buttons.TButton',background='goldenrod2', font=('Arial', 10),height=20,width=20)
+		self.style.map("Services_Buttons.TButton", foreground=[('pressed', 'WhiteSmoke'), ('active', 'WhiteSmoke')], background=[('pressed', '!disabled', 'SteelBlue4'), ('active', 'SteelBlue4')])
+		self.style.configure('Services_Buttons.TButton', foreground = 'WhiteSmoke', background = 'SteelBlue',font=('Arial', 10), height=20, width=20)
 		self.service_type_list = []
 
 	def services_buttons(self, root, service_name, call, horizontal_placement, vertical_placement):

@@ -13,7 +13,7 @@ class split_combos():
 		self.clean_list=[]
 		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter, service), style='GUI_Buttons.TButton')
 		self.split_combos_button.place(x=480, y=560)
-		self.split_text_completed= Label(root, background='goldenrod3',font=('Arial',12))
+		self.split_text_completed= Label(root, background='skyblue3',font=('Arial',12))
 	
 	def destroy_split_button(self):
 		self.split_combos_button.destroy()
@@ -38,5 +38,6 @@ class split_combos():
 		except FileNotFoundError:
 			self.split_text_completed['text']='No Combo-list Found.'
 			self.split_text_completed.place(x=65,y=247)
+			
 	def destroy_info_label(self):
 		self.split_text_completed.destroy()

@@ -14,13 +14,14 @@ class checker_gui():
 		self.gui = Tk()
 		self.style = Style()
 		self.gui.iconbitmap('@graphics/checker.xbm')
-		self.style.configure('GUI_Buttons.TButton',background='goldenrod3', font=('Arial', 10),height=20,width=14)
-		self.gui.configure(bg='goldenrod4')
-		self.gui.resizable(False,False)
+		self.style.map("GUI_Buttons.TButton", foreground=[('pressed', 'WhiteSmoke'), ('active', 'WhiteSmoke')], background=[('pressed', '!disabled', 'SteelBlue4'), ('active', 'SteelBlue4')])
+		self.style.configure('GUI_Buttons.TButton', foreground = 'WhiteSmoke', background = 'SteelBlue', font=('Arial', 10),height=20,width=14)
+		self.gui.configure(bg='skyblue4')
+		self.gui.resizable(False, False)
 		self.gui.geometry('800x600')
 		self.gui.title('Selenium Webdriver Account Checkers')
-		self.titlebox= Canvas(self.gui,bg='goldenrod2',width=510,height=178)
-		self.servicesbox= Canvas(self.gui,bg='goldenrod3',width=710,height=320)
+		self.titlebox= Canvas(self.gui,bg='skyblue2',width=510,height=178)
+		self.servicesbox= Canvas(self.gui,bg='skyblue3',width=710,height=320)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 		
 	def draw_main_title(self):
@@ -60,7 +61,7 @@ class checker_gui():
 	
 	def draw_services_box(self):
 		
-		self.servicesbox.create_line(700,50,8,50,width=2,fill='goldenrod4')
+		self.servicesbox.create_line(700,50,8,50,width=2,fill='skyblue4')
 		self.servicesbox.place(x=43,y=230)
 		
 	def return_to_main_page(self):
@@ -75,7 +76,7 @@ class checker_gui():
 			
 	def labels(self):
 		
-		self.service_label = Label(self.gui, background='goldenrod3',text='Choose a Service to Check a Combo-list:',font=('Arial', 13))
+		self.service_label = Label(self.gui, background='skyblue3',text='Choose a Service to Check a Combo-list:',font=('Arial', 13))
 		self.service_label.place(x=52, y=245)
 
 	def disney(self):
