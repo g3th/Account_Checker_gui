@@ -19,7 +19,7 @@ while True:
 			hex_to_colour = input('Enter hex value: (000000-eeeeee)')	
 			hex_value = [value for value in hex_colour_list if hex_to_colour in value]
 			index = hex_colour_list.index(hex_value[0])
-			print('\nThe hex number #{} converts to colour name \33[38;5;{}m{}'.format(str(hex_to_colour),str(x_term[index]),colour_names[index]).replace('\t','').replace('(SYSTEM)',''))
+			print('\nThe hex number #{} converts to colour name \33[38;5;{}m{}\33[0m and X-term number {}'.format(str(hex_to_colour),str(x_term[index]),colour_names[index].replace('\t','').replace('(SYSTEM)',''),x_term[index]))
 			break
 	except ValueError:
 		print('Error')
