@@ -4,6 +4,7 @@ from streaming_services.disney import disney_checker
 from streaming_services.espn import espn_checker
 from graphics.title import create_app_title
 from graphics.title import main_title, disney_title, espn_title
+from colour_list.change_gui_colours import interactive_colour_changes
 from tkinter import *
 from tkinter.ttk import *
 from pathlib import Path
@@ -25,6 +26,34 @@ class checker_gui():
 		self.servicesbox= Canvas(self.gui,bg='#5fd7d7',width=710,height=320,bd=5,relief=SUNKEN)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 	
+	def gui_colour_change(self):
+	
+		self.gui_colour_change = Button(self.gui, text= 'Change GUI Colours', command = self.change_gui_colours)
+		self.gui_colour_change.place(x=320, y=567)
+		
+	def change_gui_colours(self):
+	
+		self.services.services_destroy()
+		self.gui_colour_change.place_forget()
+		self.service_label.configure(text='Pick a Colour to Change a GUI Element')
+		change_colours = interactive_colour_changes(self.gui)
+		change_colours.unpack_lists_for_tabs()
+		change_colour_button = Button(self.gui, text = 'Change Colour', command = change_colours.change_background_colour)
+		change_colour_button.place(x=335,y=566)
+		try:
+			print(change_colour_button.wait_variable(change_colours.change_background_colour()[1]))
+			if change_colour_button.wait_variable(change_colours.change_background_colour()[1]) == 0:
+				colour = change_colour_button.wait_variable(change_colours.change_background_colour()[0])
+				print('Background Colour {}'.format(colour))
+			if change_colour_button.wait_variable(change_colours.change_background_colour()[1]) == 1:
+				colour = change_colour_button.wait_variable(change_colours.change_background_colour()[0])
+				print('Canvas Colour {}'.format(colour))
+		except IndexError:
+			pass
+			
+			
+		
+
 	def draw_gui_titles(self):
 	
 		title=main_title()
@@ -93,6 +122,7 @@ class checker_gui():
 		
 if __name__ == '__main__':
 	checker = checker_gui()
+	checker.gui_colour_change()
 	checker.draw_gui_titles()
 	checker.services_buttons()
 	checker.draw_services_box()

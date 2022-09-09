@@ -1,0 +1,47 @@
+from tkinter import *
+from tkinter import ttk
+
+
+class interactive_colour_changes:
+	
+	def __init__(self,root):
+		
+		self.tabs = ttk.Notebook(root)
+		self.colour_names = []
+		self.background_colour = ttk.Frame(self.tabs)
+		self.canvas_colour = ttk.Frame(self.tabs)
+		self.tabs.add(self.background_colour, text = 'Background Colour')
+		self.tabs.add(self.canvas_colour, text = 'Canvas Colour')
+		self.tabs.pack(expand = True)
+		self.tabs.place(x=50,y=283)
+
+	def colours_list(self):
+		self.colour_names = []
+		with open('colourslist','r') as colours:
+			for line in colours.readlines():
+				self.colour_names.append(line.split('\t')[1].replace('(SYSTEM)',''))
+		self.colour_names = sorted(self.colour_names)
+		self.colour_names_for_list = StringVar(value = sorted(self.colour_names))
+		
+	def unpack_lists_for_tabs(self):
+		self.colours_list()
+		self.background_colour_change = Listbox (self.background_colour, listvariable = self.colour_names_for_list, height = 13)	
+		self.background_colour_change.grid ( column = 3, row = 3 , sticky = 'n')
+		self.background_colour_change.pack(expand = True)
+		self.canvas_colour_change = Listbox (self.canvas_colour, listvariable = self.colour_names_for_list, height = 13)	
+		self.canvas_colour_change.grid ( column = 3, row = 3 , sticky = 'n')
+		self.canvas_colour_change.pack(expand = True)
+		
+	def change_background_colour(self):
+		self.current_selection = self.tabs.index('current')
+		if self.current_selection == 0:
+			current_selection = self.current_selection
+			colour = self.colour_names[int(self.background_colour_change.curselection()[0])]
+		if self.current_selection == 1:
+			current_selection = self.current_selection
+			colour = self.colour_names[int(self.canvas_colour_change.curselection()[0])]
+		return colour, current_selection
+		
+
+			
+	
