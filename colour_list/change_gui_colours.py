@@ -17,7 +17,7 @@ class interactive_colour_changes:
 
 	def colours_list(self):
 		self.colour_names = []
-		with open('colourslist','r') as colours:
+		with open('colour_list/colourslist','r') as colours:
 			for line in colours.readlines():
 				self.colour_names.append(line.split('\t')[1].replace('(SYSTEM)',''))
 		self.colour_names = sorted(self.colour_names)
@@ -32,16 +32,21 @@ class interactive_colour_changes:
 		self.canvas_colour_change.grid ( column = 3, row = 3 , sticky = 'n')
 		self.canvas_colour_change.pack(expand = True)
 		
-	def change_background_colour(self):
+	def change_the_colour_of_elements(self):
+		colour = self.colour_names
+		background_colour=''
+		canvas_colour=''
 		self.current_selection = self.tabs.index('current')
+		current_selection = self.current_selection
 		if self.current_selection == 0:
-			current_selection = self.current_selection
-			colour = self.colour_names[int(self.background_colour_change.curselection()[0])]
+			background_colour = int(self.background_colour_change.curselection()[0])
 		if self.current_selection == 1:
-			current_selection = self.current_selection
-			colour = self.colour_names[int(self.canvas_colour_change.curselection()[0])]
-		return colour, current_selection
+			canvas_colour = int(self.canvas_colour_change.curselection()[0])
+		return str(current_selection), background_colour, canvas_colour, colour
+	
+	def clear_all_page_elements(self):
 		
+		self.tabs.place_forget()	
 
 			
 	

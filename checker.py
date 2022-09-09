@@ -10,9 +10,14 @@ from tkinter.ttk import *
 from pathlib import Path
 
 class checker_gui():
-
+	
 	def __init__(self):
-
+		stored_colours = []
+		with open('colour_list/stored_colours','r') as stored:
+			for line in stored.readlines():
+				stored_colours.append(line)
+			stored.close()
+		print(stored_colours)			
 		self.gui = Tk()
 		self.style = Style()
 		self.gui.iconbitmap('@graphics/checker.xbm')
@@ -25,35 +30,49 @@ class checker_gui():
 		self.titlebox= create_app_title(self.gui)
 		self.servicesbox= Canvas(self.gui,bg='#5fd7d7',width=710,height=320,bd=5,relief=SUNKEN)
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
+		self.colour_page_back_button = Button(self.gui, text = 'Back', command= self.store_colours_and_return_to_main_page, style='GUI_Buttons.TButton')
 	
-	def gui_colour_change(self):
+	def gui_colour_change_button(self):
 	
-		self.gui_colour_change = Button(self.gui, text= 'Change GUI Colours', command = self.change_gui_colours)
-		self.gui_colour_change.place(x=320, y=567)
+		self.gui_colour_change = Button(self.gui, text= 'Change GUI Colours', command = self.draw_gui_colour_change_page_elements)
+		self.gui_colour_change.place(x=360, y=567)
 		
-	def change_gui_colours(self):
-	
+	def draw_gui_colour_change_page_elements(self):
+		self.colour_page_back_button.place(x=448,y=565)
 		self.services.services_destroy()
 		self.gui_colour_change.place_forget()
 		self.service_label.configure(text='Pick a Colour to Change a GUI Element')
-		change_colours = interactive_colour_changes(self.gui)
-		change_colours.unpack_lists_for_tabs()
-		change_colour_button = Button(self.gui, text = 'Change Colour', command = change_colours.change_background_colour)
+		self.change_colours = interactive_colour_changes(self.gui)
+		self.change_colours.unpack_lists_for_tabs()
+		change_colour_button = Button(self.gui, text = 'Change Colour', command = self.change_and_store_gui_colours)
 		change_colour_button.place(x=335,y=566)
-		try:
-			print(change_colour_button.wait_variable(change_colours.change_background_colour()[1]))
-			if change_colour_button.wait_variable(change_colours.change_background_colour()[1]) == 0:
-				colour = change_colour_button.wait_variable(change_colours.change_background_colour()[0])
-				print('Background Colour {}'.format(colour))
-			if change_colour_button.wait_variable(change_colours.change_background_colour()[1]) == 1:
-				colour = change_colour_button.wait_variable(change_colours.change_background_colour()[0])
-				print('Canvas Colour {}'.format(colour))
-		except IndexError:
-			pass
-			
-			
-		
 
+	def change_and_store_gui_colours(self):
+		
+		self.change_colours.change_the_colour_of_elements()
+		colours = self.change_colours.change_the_colour_of_elements()[3]
+
+		if self.change_colours.change_the_colour_of_elements()[0] == '0':
+
+			self.background = colours[self.change_colours.change_the_colour_of_elements()[1]].strip()			
+			self.gui.configure(bg=colours[self.change_colours.change_the_colour_of_elements()[1]].strip())	
+		
+		if self.change_colours.change_the_colour_of_elements()[0] == '1':
+
+			self.canvas = colours[self.change_colours.change_the_colour_of_elements()[2]].strip()
+			self.servicesbox.configure(bg=colours[self.change_colours.change_the_colour_of_elements()[2]].strip())
+
+	def store_colours_and_return_to_main_page(self):
+
+		with open('colour_list/stored_colours','a') as stored:
+			stored.write('Background: {}\nCanvas: {}'.format(self.background,self.canvas))
+		stored.close()
+		self.change_colours.clear_all_page_elements()
+		self.labels()
+		self.back_button.place_forget()
+		self.services_buttons()
+		self.draw_gui_titles()
+		self.change_colours.clear_all_page_elements()
 	def draw_gui_titles(self):
 	
 		title=main_title()
@@ -122,7 +141,7 @@ class checker_gui():
 		
 if __name__ == '__main__':
 	checker = checker_gui()
-	checker.gui_colour_change()
+	checker.gui_colour_change_button()
 	checker.draw_gui_titles()
 	checker.services_buttons()
 	checker.draw_services_box()
