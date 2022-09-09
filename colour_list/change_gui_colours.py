@@ -21,7 +21,7 @@ class interactive_colour_changes:
 			for line in colours.readlines():
 				self.colour_names.append(line.split('\t')[1].replace('(SYSTEM)',''))
 		self.colour_names = sorted(self.colour_names)
-		self.colour_names_for_list = StringVar(value = sorted(self.colour_names))
+		self.colour_names_for_list = StringVar(value = self.colour_names)
 		
 	def unpack_lists_for_tabs(self):
 		self.colours_list()
