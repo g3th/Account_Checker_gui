@@ -15,7 +15,7 @@ class checker_gui():
 	def __init__(self):
 	
 		stored_colours = []
-		background_colour = open('colour_list/background','r')
+		self.background_colour = list[open('colour_list/background','r').readline()]
 		canvas_colour = open('colour_list/canvas','r')
 		title_canvas_colour = open('colour_list/title_canvas','r')
 		self.gui = Tk()
@@ -23,7 +23,7 @@ class checker_gui():
 		self.gui.iconbitmap('@graphics/checker.xbm')
 		self.style.map("GUI_Buttons.TButton", foreground=[('pressed', 'WhiteSmoke'), ('active', 'WhiteSmoke')], background=[('pressed', '!disabled', 'SteelBlue4'), ('active', 'SteelBlue4')])
 		self.style.configure('GUI_Buttons.TButton', foreground = 'WhiteSmoke', background = 'SteelBlue', font=('Arial', 10),height=20,width=14)
-		self.gui.configure(bg=background_colour.readline().strip())
+		self.gui.configure(bg=self.background_colour[0].replace('\n',''))
 		self.gui.resizable(False, False)
 		self.gui.geometry('800x600')
 		self.gui.title('Selenium Webdriver Account Checkers')
@@ -50,19 +50,21 @@ class checker_gui():
 		self.change_colour_button.place(x=310,y=566)
 		
 	def nothing_selected_error(self):
-	
+		print(self.background_colour)
 		self.nothing_selected_popup = Toplevel(self.gui)
+		#self.nothing_selected_popup.configure(background=background_colour.readline().strip())
+		self.nothing_selected_popup.wm_transient()
 		self.nothing_selected_popup.iconbitmap('@graphics/checker.xbm')
 		self.nothing_selected_popup.geometry("160x110")
 		self.nothing_selected_popup.resizable(False,False)
 		self.nothing_selected_popup.title("Index Error")
-		Label(self.nothing_selected_popup, font=("Arial", 12),text='Please Select a \nColour',justify=CENTER).pack()
-		ok_button = Button(self.nothing_selected_popup, text = 'Will Do Chief', command = self.destroy_error_window, style='GUI_Buttons.TButton')
-		ok_button.place(x=25,y=55)
+		Label(self.nothing_selected_popup,font=("Arial", 12),text='\nPlease Select a \nColour',justify=CENTER).pack()
+		ok_button = Button(self.nothing_selected_popup, text = 'Will Do Chief', command = self.withdraw_error_window, style='GUI_Buttons.TButton')
+		ok_button.place(x=25,y=65)
 		
-	def destroy_error_window(self):
+	def withdraw_error_window(self):
 	
-		self.nothing_selected_popup.destroy()
+		self.nothing_selected_popup.withdraw()
 		
 
 	def change_and_store_gui_colours(self):
@@ -124,8 +126,9 @@ class checker_gui():
 	
 		self.change_colours.clear_all_page_elements()
 		self.change_colour_button.place_forget()
+		self.service_label.destroy()
 		self.colour_page_back_button.place_forget()
-		self.labels()	
+		self.labels()
 		self.services_buttons()
 		self.draw_gui_titles()
 		self.gui_colour_change_button()
