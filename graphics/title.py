@@ -18,6 +18,9 @@ class create_app_title:
 		for i in range(len(title[1])):
 			self.titlebox.create_text(x2,y2,text = title[1][i],fill = title[3][i],font=('Courier New',8),tag = 'bottom')
 			y2=y2+12
+	
+	def configure_canvas_colour(self, colour):
+		self.titlebox.configure(bg=colour)
 
 def main_title():
 

@@ -66,40 +66,49 @@ class checker_gui():
 	def change_and_store_gui_colours(self):
 		try:
 			self.change_colours.change_the_colour_of_elements()
-			colours = self.change_colours.change_the_colour_of_elements()[3]
+			colours = self.change_colours.change_the_colour_of_elements()[4]
 
 			if self.change_colours.change_the_colour_of_elements()[0] == '0':
-
 				self.background = colours[self.change_colours.change_the_colour_of_elements()[1]].strip()			
 				self.gui.configure(bg=colours[self.change_colours.change_the_colour_of_elements()[1]].strip())	
 			
 			if self.change_colours.change_the_colour_of_elements()[0] == '1':
-
 				self.canvas = colours[self.change_colours.change_the_colour_of_elements()[2]].strip()
 				self.servicesbox.configure(bg=colours[self.change_colours.change_the_colour_of_elements()[2]].strip())
+				
+			if self.change_colours.change_the_colour_of_elements()[0] == '2':
+				self.title_canvas = colours[self.change_colours.change_the_colour_of_elements()[3]].strip()
+				self.titlebox.configure_canvas_colour(colours[self.change_colours.change_the_colour_of_elements()[3]].strip())
 				
 		except IndexError:
 			self.nothing_selected_error()
 
 	def store_colours_and_return_to_main_page(self):
 	
-		try:
-		
+		try:	
 			if self.background:
 				with open('colour_list/background','w') as background:
 					background.write('{}\n'.format(self.background))
 			if self.canvas:
 				with open('colour_list/canvas','w') as canvas:
 					canvas.write('{}\n'.format(self.canvas))
+			if self.title_canvas:
+				with open('colour_list/title_canvas','w') as title_canvas:
+					title_canvas.write('{}\n'.format(self.title_canvas))
 			self.return_to_main_page_from_change_colour_page()		
-		except AttributeError as e:
-		
+		except AttributeError as e:		
 			if str(e) == "'checker_gui' object has no attribute 'canvas'":
 				with open('colour_list/background','w') as background:
 					background.write('{}\n'.format(self.background))
+				background.close()
+
 			if str(e) == "'checker_gui' object has no attribute 'background'":
 				with open('colour_list/canvas','w') as canvas:
 					canvas.write('{}\n'.format(self.canvas))
+				canvas.close()
+			if str(e) == "'checker_gui' object has no attribute 'background'" and str(e) == "'checker_gui' object has no attribute 'canvas'":
+				print('True')
+			print(e)
 			self.return_to_main_page_from_change_colour_page()
 	
 	def return_to_main_page_from_change_colour_page(self):
