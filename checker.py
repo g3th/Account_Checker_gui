@@ -82,7 +82,9 @@ class checker_gui():
 			self.nothing_selected_error()
 
 	def store_colours_and_return_to_main_page(self):
+	
 		try:
+		
 			if self.background:
 				with open('colour_list/background','w') as background:
 					background.write('{}\n'.format(self.background))
@@ -91,7 +93,7 @@ class checker_gui():
 					canvas.write('{}\n'.format(self.canvas))
 			self.return_to_main_page_from_change_colour_page()		
 		except AttributeError as e:
-			print(e)
+		
 			if str(e) == "'checker_gui' object has no attribute 'canvas'":
 				with open('colour_list/background','w') as background:
 					background.write('{}\n'.format(self.background))
