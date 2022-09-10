@@ -55,6 +55,3 @@ class interactive_colour_changes:
 	def clear_all_page_elements(self):
 		
 		self.tabs.place_forget()
-
-			
-	

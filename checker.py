@@ -17,6 +17,7 @@ class checker_gui():
 		stored_colours = []
 		background_colour = open('colour_list/background','r')
 		canvas_colour = open('colour_list/canvas','r')
+		title_canvas_colour = open('colour_list/title_canvas','r')
 		self.gui = Tk()
 		self.style = Style()
 		self.gui.iconbitmap('@graphics/checker.xbm')
@@ -28,6 +29,7 @@ class checker_gui():
 		self.gui.title('Selenium Webdriver Account Checkers')
 		self.titlebox= create_app_title(self.gui)
 		self.servicesbox= Canvas(self.gui,bg=canvas_colour.readline().strip(),width=710,height=320,bd=5,relief=SUNKEN)
+		self.titlebox.configure_canvas_colour(title_canvas_colour.readline().strip())
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 		self.colour_page_back_button = Button(self.gui, text = 'Back', command= self.store_colours_and_return_to_main_page, style='GUI_Buttons.TButton')
 	
@@ -51,12 +53,12 @@ class checker_gui():
 	
 		self.nothing_selected_popup = Toplevel(self.gui)
 		self.nothing_selected_popup.iconbitmap('@graphics/checker.xbm')
-		self.nothing_selected_popup.geometry("160x150")
+		self.nothing_selected_popup.geometry("160x110")
 		self.nothing_selected_popup.resizable(False,False)
 		self.nothing_selected_popup.title("Index Error")
-		Label(self.nothing_selected_popup, font=("Arial", 12),text='Please Select a \n\tColour').pack()
+		Label(self.nothing_selected_popup, font=("Arial", 12),text='Please Select a \nColour',justify=CENTER).pack()
 		ok_button = Button(self.nothing_selected_popup, text = 'Will Do Chief', command = self.destroy_error_window, style='GUI_Buttons.TButton')
-		ok_button.place(x=1,y=25)
+		ok_button.place(x=25,y=55)
 		
 	def destroy_error_window(self):
 	
@@ -86,29 +88,36 @@ class checker_gui():
 	def store_colours_and_return_to_main_page(self):
 	
 		try:	
-			if self.background:
-				with open('colour_list/background','w') as background:
-					background.write('{}\n'.format(self.background))
-			if self.canvas:
-				with open('colour_list/canvas','w') as canvas:
-					canvas.write('{}\n'.format(self.canvas))
-			if self.title_canvas:
-				with open('colour_list/title_canvas','w') as title_canvas:
-					title_canvas.write('{}\n'.format(self.title_canvas))
-			self.return_to_main_page_from_change_colour_page()		
-		except AttributeError as e:		
+			try:
+				if self.background:
+					with open('colour_list/background','w') as background:
+						background.write('{}\n'.format(self.background))
+			except AttributeError:
+				pass
+			try:
+				if self.canvas:
+					with open('colour_list/canvas','w') as canvas:
+						canvas.write('{}\n'.format(self.canvas))
+			except AttributeError:
+				pass
+			try:
+				if self.title_canvas:
+					with open('colour_list/title_canvas','w') as title_canvas:
+						title_canvas.write('{}\n'.format(self.title_canvas))
+			except AttributeError:
+				pass
+			self.return_to_main_page_from_change_colour_page()
+		
+		except AttributeError as e:
+	
 			if str(e) == "'checker_gui' object has no attribute 'canvas'":
 				with open('colour_list/background','w') as background:
 					background.write('{}\n'.format(self.background))
 				background.close()
-
 			if str(e) == "'checker_gui' object has no attribute 'background'":
 				with open('colour_list/canvas','w') as canvas:
 					canvas.write('{}\n'.format(self.canvas))
 				canvas.close()
-			if str(e) == "'checker_gui' object has no attribute 'background'" and str(e) == "'checker_gui' object has no attribute 'canvas'":
-				print('True')
-			print(e)
 			self.return_to_main_page_from_change_colour_page()
 	
 	def return_to_main_page_from_change_colour_page(self):
@@ -158,10 +167,10 @@ class checker_gui():
 		self.back_button.place_forget()
 		self.services_buttons()
 		self.draw_gui_titles()
-			
+		self.gui_colour_change_button()	
 	def labels(self):
-		
-		self.service_label = Label(self.gui, background='#5fd7d7',text='Choose a Service to Check a Combo-list:',font=('Arial', 13))
+		canvas_colour = open('colour_list/canvas','r')
+		self.service_label = Label(self.gui, background=canvas_colour.readline().strip(),text='Choose a Service to Check a Combo-list:',font=('Arial', 13))
 		self.service_label.place(x=52, y=245)
 
 	def disney(self):
@@ -170,6 +179,7 @@ class checker_gui():
 		self.titlebox.create_title(220,45,300,128,title)
 		self.checker = disney_checker(self.gui)
 		self.service_label.destroy()
+		self.gui_colour_change.destroy()
 		self.services.services_destroy()
 		self.back_button_own_thread()
 		self.checker.split_combo_file(self.gui)
