@@ -71,7 +71,7 @@ class checker_gui():
 		try:
 			self.change_colours.change_the_colour_of_elements()
 			colours = self.change_colours.change_the_colour_of_elements()[5]
-
+			title_colours = []
 			if self.change_colours.change_the_colour_of_elements()[0] == '0':
 				self.background = colours[self.change_colours.change_the_colour_of_elements()[1]].strip()			
 				self.gui.configure(bg=colours[self.change_colours.change_the_colour_of_elements()[1]].strip())	
@@ -84,13 +84,18 @@ class checker_gui():
 				self.title_canvas = colours[self.change_colours.change_the_colour_of_elements()[3]].strip()
 				self.titlebox.configure_canvas_colour(colours[self.change_colours.change_the_colour_of_elements()[3]].strip())
 			if self.change_colours.change_the_colour_of_elements()[0] == '3':
-				self.title_colour = []
+				self.title_colour_index = []
 				for item in self.change_colours.change_the_colour_of_elements()[4]:
-					self.title_colour.append(item)
-				self.title_colour = sorted(self.title_colour)
-				if len(self.title_colour) > 15:
+					self.title_colour_index.append(item)
+				self.title_colour_index = sorted(self.title_colour_index)
+				if len(self.title_colour_index) > 15:
 					self.popup_error_window('190','110',40,68,'\nPlease Select less than \n15 Colours','Will Do Chief')
 					self.title_colour = []
+				for colour in self.title_colour_index:
+					title_colours.append(colours[colour])
+				self.colour_the_titles(title_colours)
+				title=main_title()
+				self.titlebox.create_title(233,18,290,100,title,self.top_title_colours,self.bottom_title_colours)
 									
 		except IndexError:
 			self.popup_error_window('160','110',25,66,'\nPlease Select a \nColour','Will Do Chief')
@@ -141,13 +146,20 @@ class checker_gui():
 		self.draw_gui_titles()
 		self.gui_colour_change_button()
 			
-	def draw_gui_titles(self):	
+	def draw_gui_titles(self):
+		colours = open('colour_list/title_colours','r').readlines()
+		self.colour_the_titles(colours)
 		title=main_title()
-		colours = [open('title_colours','r').readlines]
-		top = []
-		bottom = []
-		for colour in colours
-		self.titlebox.create_title(233,18,290,100,title)
+		self.titlebox.create_title(233,18,290,100,title,self.top_title_colours,self.bottom_title_colours)
+	
+	def colour_the_titles(self, colours):
+		halved = len(colours)/2
+		self.top_title_colours = []
+		self.bottom_title_colours = []
+		for colour in range(0,int(len(colours)/2)):
+			self.top_title_colours.append(colours[colour].strip())
+		for colour in range(int(len(colours)/2),int(len(colours))):
+			self.bottom_title_colours.append(colours[colour].strip())
 	
 	def create_back_button(self,xpos,ypos):
 
