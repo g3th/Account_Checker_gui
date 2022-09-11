@@ -4,19 +4,19 @@ class create_app_title:
 	
 	def __init__(self, root):
 	
-		self.titlebox= Canvas(root,bg='#005f87',width=510,height=178)
+		self.titlebox= Canvas(root,width=510,height=178)
 	
-	def create_title(self, x1,y1,x2,y2,header):
+	def create_title(self, x1,y1,x2,y2,header,top_colour_list,bottom_colour_list):
 	
 		self.titlebox.delete('top')
 		self.titlebox.delete('bottom')
 		title = header
 		self.titlebox.place(x=148,y=15)
-		for i in range(len(title[0])):
-			self.titlebox.create_text(x1,y1,text = title[0][i],fill = title[2][i],font=('Courier New',8),tag = 'top')
+		for i in range(len(top_colour_list)):
+			self.titlebox.create_text(x1,y1,text = title[0][i],fill = top_colour_list[i],font=('Courier New',8),tag = 'top')
 			y1=y1+12
-		for i in range(len(title[1])):
-			self.titlebox.create_text(x2,y2,text = title[1][i],fill = title[3][i],font=('Courier New',8),tag = 'bottom')
+		for i in range(len(bottom_colour_list)):
+			self.titlebox.create_text(x2,y2,text = title[1][i],fill = bottom_colour_list[i],font=('Courier New',8),tag = 'bottom')
 			y2=y2+12
 	
 	def configure_canvas_colour(self, colour):
@@ -24,8 +24,6 @@ class create_app_title:
 
 def main_title():
 
-	colour_top=['#00ffd7','#5fffd7', '#00ffaf', '#87ffd7', '#afffd7', '#d7ffd7', '#ffffd7']
-	colour_bottom=['lightskyblue','lightskyblue1','lightskyblue2','lightskyblue3','lightskyblue4','lightskyblue3','lightskyblue2']
 	account= ['    █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗','   ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝','███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║','██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║','██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║','╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝']
 	checker=['██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗','██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗','██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝','██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗','╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║',' ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝','	 			github.com/g3th']
 	return account, checker, colour_top, colour_bottom

