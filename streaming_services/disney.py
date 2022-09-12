@@ -1,17 +1,12 @@
 import time
 import threading
 import os
-import requests
-import tkinter
 from socket import gaierror
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 from requests.exceptions import ConnectionError
-from functools import partial
 from split_combos import split_combos
 from tkinter import *
-from tkinter import ttk
 from tkinter.ttk import *
-from bs4 import BeautifulSoup as soup
 from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
@@ -31,7 +26,7 @@ class disney_checker():
 		self.Two_Factor = False
 		self.browser_options = Options()
 		self.browser_options.add_argument = ('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36')		
-		#self.browser_options.headless = True
+		self.browser_options.headless = True
 		self.start_checker = Button(root, text = 'Start Checker',command = self.account_checker_thread, style='GUI_Buttons.TButton')
 		self.stop_checker = False
 		self.run_only_on_first_checker_instance = True
@@ -85,6 +80,7 @@ class disney_checker():
 		self.infobox.config(state=DISABLED)
 		
 	def check_the_accounts(self):
+	
 		travelling = False
 		if self.run_only_on_first_checker_instance == True:
 			self.split_username_and_password()
