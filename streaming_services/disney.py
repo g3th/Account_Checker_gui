@@ -38,13 +38,13 @@ class disney_checker():
 		self.index = 0
 		self.error_returned = False
 
-	def split_combo_file(self,root, background_colour):
+	def split_combo_file(self,root, background_colour,buttonx,buttony):
 	
-		self.split_combos = split_combos(root,'disney',background_colour)
+		self.split_combos = split_combos(root,'disney',background_colour,buttonx,buttony)
 		
-	def draw_checker_button(self):
+	def draw_checker_button(self,xpos,ypos):
 			
-		self.start_checker.place(x=238,y=560)
+		self.start_checker.place(x=xpos,y=ypos)
 			
 	def draw_the_infobox(self):
 

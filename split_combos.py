@@ -8,11 +8,11 @@ from pathlib import Path
 
 class split_combos():
 
-	def __init__(self,root,service,background_colour):
+	def __init__(self,root,service,background_colour,buttonx,buttony):
 
 		self.clean_list=[]
 		self.split_combos_button = Button(root, text = 'Split Combos', command= partial(self.combo_splitter, service), style='GUI_Buttons.TButton')
-		self.split_combos_button.place(x=480, y=560)
+		self.split_combos_button.place(x=buttonx, y=buttony)
 		self.split_text_completed= Label(root, background=background_colour,font=('Arial',12))
 	
 	def destroy_split_button(self):

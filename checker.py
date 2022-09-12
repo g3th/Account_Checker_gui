@@ -166,9 +166,9 @@ class checker_gui():
 		self.back_button = Button(self.gui, text = 'Back', command= self.return_to_main_page, style='GUI_Buttons.TButton')
 		self.back_button.place(x=xpos,y=ypos)
 	
-	def back_button_own_thread(self):
+	def back_button_own_thread(self,x,y):
 	
-		threading.Thread(target=self.create_back_button,args=(358, 560)).start()
+		threading.Thread(target=self.create_back_button,args=(x,y)).start()
 	
 	def services_buttons(self):
 
@@ -204,14 +204,14 @@ class checker_gui():
 	def disney(self):
 		
 		title = disney_title()
-		self.titlebox.create_title(220,25,300,100,title)
+		self.titlebox.create_title(220,25,300,100,title,self.top_title_colours,self.bottom_title_colours)
 		self.checker = disney_checker(self.gui,self.canvas_colour)
 		self.service_label.destroy()
 		self.gui_colour_change.destroy()
 		self.services.services_destroy()
-		self.back_button_own_thread()
-		self.checker.split_combo_file(self.gui, self.canvas_colour)
-		self.checker.draw_checker_button()
+		self.back_button_own_thread(355, 567)
+		self.checker.split_combo_file(self.gui, self.canvas_colour,477, 567)
+		self.checker.draw_checker_button(233,567)
 
 	def espn_plus(self):
 	
