@@ -102,30 +102,27 @@ class checker_gui():
 
 	def store_colours_and_return_to_main_page(self):
 	
-		try:	
-			try:
-				if self.background:
-					with open('colour_list/background','w') as background:
-						background.write('{}\n'.format(self.background))
-			except AttributeError:
-				pass
-			try:
-				if self.canvas:
-					with open('colour_list/canvas','w') as canvas:
-						canvas.write('{}\n'.format(self.canvas))
-			except AttributeError:
-				pass
-			try:
-				if self.title_canvas:
-					with open('colour_list/title_canvas','w') as title_canvas:
-						title_canvas.write('{}\n'.format(self.title_canvas))
-			except AttributeError:
-				pass
-			self.return_to_main_page_from_change_colour_page()
-		
-		except Exception as e:
 
-			self.return_to_main_page_from_change_colour_page()
+		try:
+			if self.background:
+				with open('colour_list/background','w') as background:
+					background.write('{}\n'.format(self.background))
+		except AttributeError:
+			pass
+		try:
+			if self.canvas:
+				with open('colour_list/canvas','w') as canvas:
+					canvas.write('{}\n'.format(self.canvas))
+		except AttributeError:
+			pass
+		try:
+			if self.title_canvas:
+				with open('colour_list/title_canvas','w') as title_canvas:
+					title_canvas.write('{}\n'.format(self.title_canvas))
+		except AttributeError:
+			pass
+		self.return_to_main_page_from_change_colour_page()
+
 	
 	def return_to_main_page_from_change_colour_page(self):
 	
