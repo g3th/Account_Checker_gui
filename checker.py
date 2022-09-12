@@ -66,7 +66,6 @@ class checker_gui():
 	
 		self.popup_error.withdraw()
 		
-
 	def change_and_store_gui_colours(self):
 		try:
 			self.change_colours.change_the_colour_of_elements()
@@ -101,7 +100,6 @@ class checker_gui():
 			self.popup_error_window('160','110',25,66,'\nPlease Select a \nColour','Will Do Chief')
 
 	def store_colours_and_return_to_main_page(self):
-	
 
 		try:
 			if self.background:
@@ -121,8 +119,8 @@ class checker_gui():
 					title_canvas.write('{}\n'.format(self.title_canvas))
 		except AttributeError:
 			pass
-		self.return_to_main_page_from_change_colour_page()
 
+		self.return_to_main_page_from_change_colour_page()
 	
 	def return_to_main_page_from_change_colour_page(self):
 	
